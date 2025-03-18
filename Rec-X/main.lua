@@ -38,7 +38,7 @@ local RecordingButton = Instance.new("ImageButton")
 RecordingButton.Parent = CoreGui
 RecordingButton.Position = UDim2.new(0.85, 0, 0, 5)
 RecordingButton.Size = UDim2.new(0, 40, 0, 40)
-RecordingButton.Image = "rbxassetid://123456" -- Green circle image (Replace with actual ID)
+RecordingButton.Image = "117067954408493" -- Green circle image (Replace with actual ID)
 RecordingButton.BackgroundTransparency = 1
 RecordingButton.Active = true
 
@@ -46,7 +46,7 @@ local MicButton = Instance.new("ImageButton")
 MicButton.Parent = RecordingButton -- Now it's a child of RecordingButton
 MicButton.Position = UDim2.new(1.1, 0, 0, 0)
 MicButton.Size = UDim2.new(0, 40, 0, 40)
-MicButton.Image = "rbxassetid://654321" -- Microphone icon (Replace with actual ID)
+MicButton.Image = "102788873982634" -- Microphone icon (Replace with actual ID)
 MicButton.BackgroundTransparency = 1
 MicButton.Active = true
 MicButton.Visible = false -- Hidden until recording starts
@@ -62,7 +62,7 @@ RecordingButton.MouseButton1Click:Connect(function()
         MicButton.Visible = true
         sendRecordingCommand("start")
     else
-        RecordingButton.Image = "rbxassetid://123456" -- Green circle image
+        RecordingButton.Image = "117067954408493" -- Green circle image
         -- Hide all children when stopping recording
         for _, child in pairs(RecordingButton:GetChildren()) do
             if child:IsA("GuiObject") then
@@ -77,10 +77,10 @@ end)
 MicButton.MouseButton1Click:Connect(function()
     isMicOn = not isMicOn
     if isMicOn then
-        MicButton.Image = "rbxassetid://654321" -- Normal mic icon
+        MicButton.Image = "102788873982634" -- Normal mic icon
         sendRecordingCommand("mic_on")
     else
-        MicButton.Image = "rbxassetid://654322" -- Strikethrough mic icon
+        MicButton.Image = "106764888917818" -- Strikethrough mic icon
         sendRecordingCommand("mic_off")
     end
 end)
