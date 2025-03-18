@@ -18,9 +18,9 @@ else
     return
 end
 
--- Function to send recording commands to external software
+-- Function to send recording commands to OBS WebSocket API
 local function sendRecordingCommand(command)
-    local url = "http://localhost:4455/obs/record?command=" .. command -- Change URL for your setup
+    local url = "http://localhost:4455/obs/record?command=" .. command -- Adjust for OBS WebSocket API
     local success, response = pcall(function()
         return HttpService:GetAsync(url)
     end)
@@ -38,7 +38,7 @@ local RecordingButton = Instance.new("ImageButton")
 RecordingButton.Parent = CoreGui
 RecordingButton.Position = UDim2.new(0.85, 0, 0, 5)
 RecordingButton.Size = UDim2.new(0, 40, 0, 40)
-RecordingButton.Image = "117067954408493" -- Green circle image (Replace with actual ID)
+RecordingButton.Image = "rbxassetid://89021804444400" -- Green circle image (Replace with actual ID)
 RecordingButton.BackgroundTransparency = 1
 RecordingButton.Active = true
 
@@ -46,10 +46,50 @@ local MicButton = Instance.new("ImageButton")
 MicButton.Parent = RecordingButton -- Now it's a child of RecordingButton
 MicButton.Position = UDim2.new(1.1, 0, 0, 0)
 MicButton.Size = UDim2.new(0, 40, 0, 40)
-MicButton.Image = "102788873982634" -- Microphone icon (Replace with actual ID)
+MicButton.Image = "rbxassetid://74487332033317" -- Microphone icon (Replace with actual ID)
 MicButton.BackgroundTransparency = 1
 MicButton.Active = true
 MicButton.Visible = false -- Hidden until recording starts
+
+-- Create Pop-up Message
+local PopupFrame = Instance.new("Frame")
+PopupFrame.Parent = CoreGui
+PopupFrame.Size = UDim2.new(0, 300, 0, 100)
+PopupFrame.Position = UDim2.new(0.5, -150, 0.4, 0)
+PopupFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+PopupFrame.BackgroundTransparency = 0.2
+PopupFrame.Visible = true
+PopupFrame.Active = true
+PopupFrame.BorderSizePixel = 0
+PopupFrame.ZIndex = 10
+
+local PopupText = Instance.new("TextLabel")
+PopupText.Parent = PopupFrame
+PopupText.Size = UDim2.new(1, -40, 1, 0)
+PopupText.Position = UDim2.new(0, 20, 0, 0)
+PopupText.Text = "Script by Den. You need OBS Studio to use this script. Thanks for using!"
+PopupText.TextColor3 = Color3.fromRGB(255, 255, 255)
+PopupText.BackgroundTransparency = 1
+PopupText.TextScaled = true
+PopupText.TextWrapped = true
+PopupText.Font = Enum.Font.SourceSansBold
+PopupText.ZIndex = 11
+
+-- Create Close Button (X)
+local CloseButton = Instance.new("TextButton")
+CloseButton.Parent = PopupFrame
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -35, 0, 5)
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.BackgroundTransparency = 1
+CloseButton.Font = Enum.Font.SourceSansBold
+CloseButton.TextScaled = true
+CloseButton.ZIndex = 12
+
+CloseButton.MouseButton1Click:Connect(function()
+    PopupFrame.Visible = false
+end)
 
 local isRecording = false
 local isMicOn = true
@@ -58,11 +98,16 @@ local isMicOn = true
 RecordingButton.MouseButton1Click:Connect(function()
     isRecording = not isRecording
     if isRecording then
-        RecordingButton.Image = "121006464693383" -- Red circle image
+        RecordingButton.Image = "rbxassetid://111579370672666" -- Red circle image
         MicButton.Visible = true
         sendRecordingCommand("start")
+        if isMicOn then
+            sendRecordingCommand("enable_mic") -- Enable both game and user audio
+        else
+            sendRecordingCommand("disable_mic") -- Only capture game audio
+        end
     else
-        RecordingButton.Image = "117067954408493" -- Green circle image
+        RecordingButton.Image = "rbxassetid://89021804444400" -- Green circle image
         -- Hide all children when stopping recording
         for _, child in pairs(RecordingButton:GetChildren()) do
             if child:IsA("GuiObject") then
@@ -70,6 +115,7 @@ RecordingButton.MouseButton1Click:Connect(function()
             end
         end
         sendRecordingCommand("stop")
+        sendRecordingCommand("save_mp4") -- Save recording as an MP4 file on desktop
     end
 end)
 
@@ -77,10 +123,10 @@ end)
 MicButton.MouseButton1Click:Connect(function()
     isMicOn = not isMicOn
     if isMicOn then
-        MicButton.Image = "102788873982634" -- Normal mic icon
-        sendRecordingCommand("mic_on")
+        MicButton.Image = "rbxassetid://74487332033317" -- Normal mic icon
+        sendRecordingCommand("enable_mic") -- Enable both game and user audio
     else
-        MicButton.Image = "106764888917818" -- Strikethrough mic icon
-        sendRecordingCommand("mic_off")
+        MicButton.Image = "rbxassetid://119219199727898" -- Strikethrough mic icon
+        sendRecordingCommand("disable_mic") -- Only capture game audio
     end
 end)
