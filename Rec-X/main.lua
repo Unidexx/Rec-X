@@ -88,6 +88,12 @@ CloseButton.TextScaled = true
 CloseButton.ZIndex = 12
 
 CloseButton.MouseButton1Click:Connect(function()
+    for i = 0.2, 1, 0.1 do
+        PopupFrame.BackgroundTransparency = i
+        PopupText.TextTransparency = i
+        CloseButton.TextTransparency = i
+        wait(0.07) -- Slightly longer fade-out for smooth effect
+    end
     PopupFrame.Visible = false
 end)
 
