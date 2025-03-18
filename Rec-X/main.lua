@@ -20,7 +20,7 @@ end
 
 -- Function to send recording commands to external software
 local function sendRecordingCommand(command)
-    local url = "http://localhost:5000/record?command=" .. command -- Change URL for your setup
+    local url = "http://localhost:4455/obs/record?command=" .. command -- Change URL for your setup
     local success, response = pcall(function()
         return HttpService:GetAsync(url)
     end)
