@@ -58,7 +58,7 @@ local isMicOn = true
 RecordingButton.MouseButton1Click:Connect(function()
     isRecording = not isRecording
     if isRecording then
-        RecordingButton.Image = "rbxassetid://789012" -- Red circle image
+        RecordingButton.Image = "121006464693383" -- Red circle image
         MicButton.Visible = true
         sendRecordingCommand("start")
     else
